@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Plant Search{% endblock %}
+
+{% block content %}
+
+<h1 class="plantnet-text" style="justify-content: center;">Find Your Ayurvedic Plant - Search & Discover</h1>
+    <!-- Search Form -->
+    <div class="search-form">
+        <h3>Search for a Plant</h3>
+        <form action="/search" method="post">
+            <input type="text" name="plant_name" placeholder="Enter plant name" required>
+            <button type="submit">Discover</button>
+        </form>
+    </div>
+
+    <!-- Search Result -->
+    {% if request.method == "POST" %}  <!-- Ensure message appears only after form submission -->
+        {% if plant_details %}
+        <div class="container">
+            <div class="image-container">
+                <h3 style="color: #4CAF50;">Plant Image</h3>
+                <img src="{{ plant_details.image }}" alt="{{ plant_details.name }}">
+            </div>
+            <div class="details-container">
+                <h3 style="color: #4CAF50;">Plant Details</h3>
+                <div class="info">
+                    {% for key, value in plant_details.items() %}
+                        {% if key != "image" %}  <!-- Exclude image key from displaying -->
+                            <p><strong>{{ key|replace("_", " ")|title }}:</strong> {{ value }}</p>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+            <p style="text-align: center; font-size: 18px; color: red;">No plant details available. Try another search.</p>
+        {% endif %}
+    {% endif %}
+
+    <br>
+    <div style="text-align: center;">
+        <a href="/" class="button">Go Back to Home</a>
+    </div>
+{% endblock %}

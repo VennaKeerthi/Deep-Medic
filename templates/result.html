@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction{% endblock %}
+
+{% block content %}
+    <!-- Upload Form -->
+    <h1 class="plantnet-text" style="justify-content: center;">Wondering what herb this is? Let us help you identify it!</h1>
+    <div class="upload-form">
+        <h3>Upload a Plant Image</h3>
+        <form action="/result" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" required>
+            <button type="submit">Predict</button>
+        </form>
+    </div>
+
+    <!-- Prediction Result -->
+    {% if uploaded_image %}
+    <div class="container">
+        <div class="image-container">
+            <h3 style="color: #4CAF50;">Uploaded Image</h3>
+            <img src="{{ uploaded_image }}" alt="Uploaded Image">
+        </div>
+        <div class="details-container">
+            <h3 style="color: #4CAF50; margin-bottom: 5px;">Prediction</h3>
+            <p><strong>Plant Name:</strong> {{ predicted_class }}</p>
+            <p><strong>Confidence:</strong> {{ confidence|round(2) }}%</p>
+
+            {% if plant_details %}
+            <h3 style="color: #4CAF50; margin-bottom: 5px;">Plant Details</h3>
+            <div class="info">
+                {% for key, value in plant_details.items() %}
+                    <p><strong>{{ key }}:</strong> {{ value }}</p>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p>No additional details found for this plant.</p>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    <br>
+    <a href="/">Go Back to Home</a>
+{% endblock %}

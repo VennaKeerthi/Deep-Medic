@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Disease Remedy{% endblock %}
+
+{% block content %}
+<h1 class="plantnet-text" style="justify-content: center;">Discover Ayurvedic Plants for Your Disease</h1>
+
+<!-- Disease Dropdown Form -->
+<div class="search-form">
+    <h3>Select a Disease</h3>
+    <form action="/remedy" method="post">
+        <select name="disease" required>
+            <option value="">-- Choose a Disease --</option>
+            {% for disease in disease_list %}
+                <option value="{{ disease }}" {% if disease == selected_disease %}selected{% endif %}>{{ disease }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Find Plants</button>
+    </form>
+</div>
+
+<!-- Remedies Result -->
+{% if request.method == "POST" %}
+    {% if suggestions %}
+        <div class="container" style="display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 30px; padding: 20px;">
+            {% for plant in suggestions %}
+                <div class="image-container" style="display: flex; flex-direction: column; align-items: center; min-width: 220px;">
+                    <h3 style="color: #4CAF50; margin-bottom: 10px;">{{ plant.name }}</h3>
+                    <img src="{{ plant.image }}" alt="{{ plant.name }}" style="width: 200px; height: 200px; border-radius: 10px;">
+                    <p style="font-size: 15px; margin-top: 12px; text-align: center; width: 160px;">
+                        <strong>Usage:</strong> {{ plant.usage }}
+                    </p>
+                </div>            
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style="text-align: center; font-size: 18px; color: red;">No remedy found for this disease. Try another.</p>
+    {% endif %}
+{% endif %}
+
+
+
+<br>
+<div style="text-align: center;">
+    <a href="/" class="button">Go Back to Home</a>
+</div>
+{% endblock %}
